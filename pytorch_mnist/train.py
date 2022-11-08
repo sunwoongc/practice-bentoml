@@ -104,7 +104,7 @@ def cross_validate(dataset, epochs=NUM_EPOCHS, k_folds=K_FOLDS, device="cpu"):
             train_epoch(model, optimizer, loss_function, train_loader, epoch)
         
         correct, total = test_model(model, test_loader)
-        print(f"Accuracy for fold {fold:d}: {100.0 * correct / total:d}%")
+        print(f"Accuracy for fold {fold}: {100.0 * correct / total}%")
         print("------------------------------------")
     
     print(f"K-FOLD CROSS VALIDATION RESULTS FOR {K_FOLDS} FOLDS")
@@ -182,7 +182,7 @@ if __name__ == "__main__":
     )
 
     if args.k_folds > 1:
-        cv_results = cross_validate(train_set, args.epochs, device)
+        cv_results = cross_validate(train_set, args.epochs, args.k_folds, device)
     else:
         cv_results = {}
     

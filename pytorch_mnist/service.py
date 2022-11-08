@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from numpy.typing import NDArray
 
-mnist_runner = bentoml.pytroch.get("pytorch_mnist:latest").to_runner()
+mnist_runner = bentoml.pytorch.get("pytorch_mnist:latest").to_runner()
 svc = bentoml.Service("pytorch_mnist_demo", runners=[mnist_runner])
 
 def to_numpy(tensor):
