@@ -107,16 +107,18 @@ def cross_validate(dataset, epochs=NUM_EPOCHS, k_folds=K_FOLDS, device="cpu"):
         print(f"Accuracy for fold {fold}: {100.0 * correct / total}%")
         print("------------------------------------")
     
+    # Print fold results
     print(f"K-FOLD CROSS VALIDATION RESULTS FOR {K_FOLDS} FOLDS")
     print("--------------------------------")
-    sum = 0.0
+    sum_ = 0.0
     for key, value in results.items():
         print(f"Fold {key}: {value} %")
-        sum += value
+        sum_ += value
 
-    print(f"Average: {sum/len(results.items())} %")
+    print(f"Average: {sum_/len(results.items())} %")
 
     return results
+
 
 def train(dataset, epochs=NUM_EPOCHS, device="cpu"):
 
