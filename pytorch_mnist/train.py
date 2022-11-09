@@ -60,19 +60,19 @@ def test_model(model, test_loader, device="cpu"):
     correct, total = 0, 0
     model.eval()
     with torch.no_grad():
-        for batch_idx, (inputs, targets) in enumerate(test_loader):
+        for _, (inputs, targets) in enumerate(test_loader):
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = model(inputs)
             _, predicted = torch.max(outputs.data, 1)
             total += targets.size(0)
             correct += (predicted == targets).sum().item()
-    
+
     return correct, total
 
 def cross_validate(dataset, epochs=NUM_EPOCHS, k_folds=K_FOLDS, device="cpu"):
     results = {}
     kfold = KFold(n_splits=k_folds, shuffle=True)
-
+    
     print("------------------------------------")
 
     # K-fold Cross Validation model evaluation
@@ -101,11 +101,12 @@ def cross_validate(dataset, epochs=NUM_EPOCHS, k_folds=K_FOLDS, device="cpu"):
         optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
         loss_function = nn.CrossEntropyLoss()
         for epoch in range(epochs):
-            train_epoch(model, optimizer, loss_function, train_loader, epoch)
+            train_epoch(model, optimizer, loss_function, train_loader, epoch, device=device)
         
-        correct, total = test_model(model, test_loader)
+        correct, total = test_model(model, test_loader, device)
         print(f"Accuracy for fold {fold}: {100.0 * correct / total}%")
         print("------------------------------------")
+        results[fold] = 100.0 * (correct / total)
     
     # Print fold results
     print(f"K-FOLD CROSS VALIDATION RESULTS FOR {K_FOLDS} FOLDS")
@@ -129,7 +130,7 @@ def train(dataset, epochs=NUM_EPOCHS, device="cpu"):
         sampler=train_sampler,
         worker_init_fn=_dataloader_init_fn,
     )
-    model = SimpleConvNet()
+    model = SimpleConvNet().to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
     loss_function = nn.CrossEntropyLoss()
     for epoch in range(epochs):

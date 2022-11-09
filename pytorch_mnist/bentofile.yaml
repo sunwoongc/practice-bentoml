@@ -7,7 +7,6 @@ include:
 - "*.py"
 exclude:
 - "tests/"
-- "locustfile.py"
 python:
   packages:
     - scikit-learn

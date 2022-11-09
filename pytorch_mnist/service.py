@@ -39,5 +39,5 @@ async def predict_image(f:PILImage) -> NDArray[t.Any]:
     arr = np.array(f) / 255.0
     assert arr.shape == (28, 28)
     arr = np.expand_dims(arr, (0, 1)).astype("float32")
-    output_tensor = await mnist_runner.async_run(inp)
+    output_tensor = await mnist_runner.async_run(arr)
     return to_numpy(output_tensor)
